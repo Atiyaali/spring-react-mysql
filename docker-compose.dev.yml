@@ -10,13 +10,18 @@ services:
       MYSQL_DATABASE: dockerjava
       MYSQL_USER: appuser
       MYSQL_PASSWORD: apppass
-
-    volumes:
-      - type: volume
-        source: mysql-data
-        target: /var/lib/mysql
+    volumes: 
+      - mysql-data:/var/lib/mysql
+    # volumes:
+    #   - type: volume
+    #     source: mysql-data
+    #     target: /var/lib/mysql
     networks:
       - localnet
+    healthcheck:
+    test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+    timeout: 20s
+    retries: 10
 
   pma:
     depends_on:
@@ -33,13 +38,15 @@ services:
 
   backend:
     depends_on:
-      - mysql
+      mysql:
+         condition: service_healthy
     container_name: dockerized_backend
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    volumes:
-      - .:/dockerized:cached
+    image: atiyadocker/spring-react-backend:latest
+    # build:
+    #   context: ./backend
+    #   dockerfile: Dockerfile
+    # volumes:
+    #   - .:/dockerized:cached
     ports:
       - "8080:8080"
 #    command: /bin/sh -c "while sleep 1000; do :; done"
@@ -55,9 +62,10 @@ services:
     depends_on:
       - backend
     container_name: dockerized_frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: atiyadocker/spring-react-frontend:latest
+    # build:
+    #   context: ./frontend
+    #   dockerfile: Dockerfile
 #    volumes:
 #      - .:/dockerized:cached
 #    command: /bin/sh -c "while sleep 1000; do :; done"
