@@ -23,24 +23,24 @@ jobs:
     - name: Build the frontend Docker image
       run: |
        docker build \
-       -t spring-react-frontend:${{github.sha}} \
-       -t spring-react-frontend:latest \
+       -t atiyadocker/spring-react-frontend:${{github.sha}} \
+       -t atiyadocker/spring-react-frontend:latest \
        ./frontend
     - name: Build backend Docker Image
       run: |
        docker build \
-       -t atiyadocker\spring-react-backend:${{github.sha}} \
-       -t atiyadocker\spring-react-backend:latest \
+       -t atiyadocker/spring-react-backend:${{github.sha}} \
+       -t atiyadocker/spring-react-backend:latest \
        ./backend
 
     - name: push frontend Image
       run: |
-       docker push atiyadocker\spring-react-frontend:${{github.sha}}
-       docker push atiyadocker\spring-react-frontend:latest
+       docker push atiyadocker/spring-react-frontend:${{github.sha}}
+       docker push atiyadocker/spring-react-frontend:latest
     - name: push backend image
       run: |
-       docker push atiyadocker\spring-react-backend:${{github.sha}}
-       docker push atiyadocker\spring-react-backend:latest
+       docker push atiyadocker/spring-react-backend:${{github.sha}}
+       docker push atiyadocker/spring-react-backend:latest
        
 
     
