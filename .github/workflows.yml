@@ -1,0 +1,47 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: login to docker
+      uses: docker/login-action@v2
+      with:
+        username: ${{secrets.DOCKER_USERNAME}}
+        password: ${{secrets.DOCKER_PASSWORD}}
+    
+    - name: Build the frontend Docker image
+      run: |
+       docker build \
+       -t spring-react-frontend:${{github.sha}} \
+       -t spring-react-frontend:latest \
+       ./frontend
+    - name: Build backend Docker Image
+      run: |
+       docker build \
+       -t atiyadocker\spring-react-backend:${{github.sha}} \
+       -t atiyadocker\spring-react-backend:latest \
+       ./backend
+
+    - name: push frontend Image
+      run: |
+       docker push atiyadocker\spring-react-frontend:${{github.sha}}
+       docker push atiyadocker\spring-react-frontend:latest
+    - name: push backend image
+      run: |
+       docker push atiyadocker\spring-react-backend:${{github.sha}}
+       docker push atiyadocker\spring-react-backend:latest
+       
+
+    
+       
