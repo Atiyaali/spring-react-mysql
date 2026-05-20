@@ -84,8 +84,8 @@ function App() {
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Email</th>
+            <th>name</th>
+            <th>email</th>
           </tr>
         </thead>
 
